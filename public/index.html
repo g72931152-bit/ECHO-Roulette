@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#202124" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="ECHO — минималистичный видеочат со случайным собеседником прямо в браузере." />
+  <title>ECHO — видеочат со случайным собеседником</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" /></noscript>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-logo" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="12" fill="currentColor"/>
+      <circle cx="12" cy="12" r="3" style="fill:var(--on-primary)"/>
+      <circle cx="12" cy="12" r="7" fill="none" stroke-width="1.5" opacity=".7" style="stroke:var(--on-primary)"/>
+    </symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15a.998.998 0 0 0-.98-.85c-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08a6.993 6.993 0 0 0 5.91-5.78c.1-.6-.39-1.14-1-1.14z"/></symbol>
+    <symbol id="i-mic-off" viewBox="0 0 24 24"><path d="M19 11c0 1.19-.34 2.3-.9 3.28l-1.23-1.23c.27-.62.43-1.31.43-2.05H19zm-4 .16L9 5.18V5c0-1.66 1.34-3 3-3s3 1.34 3 3v6.16zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></symbol>
+    <symbol id="i-videocam" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></symbol>
+    <symbol id="i-videocam-off" viewBox="0 0 24 24"><path d="M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82L21 17.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></symbol>
+    <symbol id="i-call-end" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1-.29-.7c0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28a11.27 11.27 0 0 0-2.67-1.85.996.996 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></symbol>
+  </svg>
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ECHO — на главную">
+      <svg class="i" aria-hidden="true"><use href="#i-logo"/></svg>
+      <span>ECHO</span>
+    </a>
+    <div class="top-actions">
+      <button id="supportBtn" class="btn btn-outlined" type="button">Поддержать</button>
+      <button id="settingsBtn" class="icon-btn" type="button" aria-label="Настройки" title="Настройки" hidden>
+        <svg class="i" aria-hidden="true"><use href="#i-settings"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="landing" class="landing view active">
+      <div class="landing-copy">
+        <h1>Разговор начинается случайно</h1>
+        <p class="lead">Камера и микрофон подключаются только после твоего разрешения. Никаких аккаунтов для первого запуска.</p>
+        <button id="startBtn" class="btn btn-filled btn-lg" type="button">
+          <svg class="i" aria-hidden="true"><use href="#i-videocam"/></svg>
+          Начать разговор
+        </button>
+        <p class="trust"><svg class="i i-sm" aria-hidden="true"><use href="#i-lock"/></svg>Защищённое соединение через браузер</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+        <span class="core"><svg class="i i-lg"><use href="#i-videocam"/></svg></span>
+      </div>
+    </section>
+
+    <section id="room" class="room view">
+      <div id="stage" class="stage">
+        <video id="remoteVideo" class="remote" autoplay playsinline aria-label="Видео собеседника"></video>
+        <div id="remoteEmpty" class="stage-empty">
+          <svg class="spinner" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke-width="4" stroke-linecap="round"/></svg>
+          <h2 id="roomTitle">Ищем собеседника</h2>
+          <p id="roomSubtitle">Это обычно занимает несколько секунд.</p>
+        </div>
+        <div class="chip" role="status" aria-live="polite">
+          <span id="chipDot" class="dot" aria-hidden="true"></span>
+          <span id="peerStatus">Поиск</span>
+        </div>
+        <div id="pip" class="pip">
+          <video id="localVideo" autoplay muted playsinline aria-label="Твоя камера"></video>
+          <div class="pip-off" aria-hidden="true"><svg class="i"><use href="#i-videocam-off"/></svg></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="micBtn" class="fab" type="button" aria-label="Выключить микрофон" title="Выключить микрофон">
+          <svg class="i i-on" aria-hidden="true"><use href="#i-mic"/></svg>
+          <svg class="i i-off" aria-hidden="true"><use href="#i-mic-off"/></svg>
+        </button>
+        <button id="cameraBtn" class="fab" type="button" aria-label="Выключить камеру" title="Выключить камеру">
+          <svg class="i i-on" aria-hidden="true"><use href="#i-videocam"/></svg>
+          <svg class="i i-off" aria-hidden="true"><use href="#i-videocam-off"/></svg>
+        </button>
+        <button id="nextBtn" class="btn btn-filled btn-lg" type="button">
+          Следующий
+          <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </button>
+        <button id="reportBtn" class="fab" type="button" aria-label="Пожаловаться" title="Пожаловаться" disabled>
+          <svg class="i" aria-hidden="true"><use href="#i-flag"/></svg>
+        </button>
+        <button id="endBtn" class="fab fab-end" type="button" aria-label="Завершить разговор" title="Завершить разговор">
+          <svg class="i" aria-hidden="true"><use href="#i-call-end"/></svg>
+        </button>
+      </div>
+
+      <!-- Рекламный слот: чтобы включить, удали атрибут hidden -->
+      <div class="ad-slot" id="adSlot" hidden>Рекламное место · можно подключить позже</div>
+    </section>
+  </main>
+
+  <div id="permissionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="permissionTitle">
+    <div class="dialog">
+      <h2 id="permissionTitle">Разрешить камеру и микрофон?</h2>
+      <p>Браузер покажет системный запрос. ECHO не включает устройства без твоего действия.</p>
+      <div class="dialog-actions">
+        <button id="cancelPermission" class="btn btn-text" type="button">Отмена</button>
+        <button id="allowPermission" class="btn btn-filled" type="button" data-autofocus>Разрешить</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="dialog">
+      <h2 id="settingsTitle">Настройки</h2>
+      <label class="field">Камера<select id="cameraSelect"></select></label>
+      <label class="field">Микрофон<select id="micSelect"></select></label>
+      <label class="field">Громкость голоса
+        <select id="voiceEffect">
+          <option value="off">Обычная</option>
+          <option value="low">Тише</option>
+          <option value="high">Громче</option>
+        </select>
+      </label>
+      <small>Громкость меняется только у твоего микрофона — собеседник услышит уже обработанный звук.</small>
+      <div class="dialog-actions">
+        <button id="closeSettings" class="btn btn-filled" type="button">Готово</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="reportModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reportTitle">
+    <div class="dialog">
+      <h2 id="reportTitle">Пожаловаться на собеседника</h2>
+      <p>Разговор будет завершён, а мы начнём поиск нового собеседника.</p>
+      <label class="field">Что случилось?
+        <textarea id="reportReason" maxlength="240" placeholder="Коротко опиши проблему…"></textarea>
+      </label>
+      <div id="reportCounter" class="counter">0 / 240</div>
+      <div class="dialog-actions">
+        <button id="cancelReport" class="btn btn-text" type="button">Отмена</button>
+        <button id="submitReport" class="btn btn-filled" type="button">Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
