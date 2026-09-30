@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4f5f2">
+  <meta name="description" content="ELVAR — строгий минималистичный сервис случайных видеосвязей.">
+  <title>ELVAR — случайные разговоры</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="background-grid" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ELVAR">
+      <span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="brand-word">ELVAR</span>
+    </a>
+    <div class="top-actions">
+      <button id="supportBtn" class="top-link" type="button">Поддержать</button>
+      <button id="feedbackBtn" class="top-link" type="button">Обратная связь</button>
+      <button id="profileBtn" class="profile-trigger" type="button" aria-label="Открыть профиль">
+        <span id="topAvatar" class="avatar avatar-small">+</span>
+        <span id="topName">Профиль</span>
+      </button>
+      <button id="settingsBtn" class="icon-button" type="button" aria-label="Настройки" hidden>☰</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section id="landing" class="landing view active">
+      <div class="landing-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span><span>случайные разговоры</span></div>
+        <h1>Один разговор.<br><span>Без лишнего.</span></h1>
+        <p>Выбирай страну, открывай камеру только после своего разрешения и подключайся к случайному собеседнику. Интерфейс не мешает разговору.</p>
+        <div class="landing-actions">
+          <button id="startBtn" class="primary-action" type="button"><span>Начать разговор</span><span class="action-arrow">↗</span></button>
+          <button id="editProfileLanding" class="text-action" type="button">Настроить профиль</button>
+        </div>
+        <button class="profile-summary" id="landingProfileSummary" type="button" aria-label="Открыть профиль">
+          <span class="avatar avatar-large" id="landingAvatar">+</span>
+          <span class="summary-copy"><strong id="landingName">Профиль ещё не создан</strong><small id="landingMeta">Имя · страна · описание</small></span>
+          <span class="summary-arrow" aria-hidden="true">→</span>
+        </button>
+        <div class="privacy-note"><span>01</span><span>Видео и аудио передаются между браузерами. Сервер нужен для поиска собеседника и сигнализации.</span></div>
+      </div>
+
+      <div class="landing-visual" aria-hidden="true">
+        <div class="visual-frame">
+          <div class="visual-label"><span>ELVAR</span><span>LIVE / 01</span></div>
+          <div class="visual-orbit">
+            <div class="orbit-ring ring-one"></div>
+            <div class="orbit-ring ring-two"></div>
+            <div class="orbit-core"><span></span></div>
+            <div class="visual-person person-a"><i></i><b></b><em></em></div>
+            <div class="visual-person person-b"><i></i><b></b><em></em></div>
+          </div>
+          <div class="visual-footer"><span>FIND</span><span>CONNECT</span><span>TALK</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="room" class="room view">
+      <div id="stage" class="stage" data-mode="searching">
+        <div class="stage-noise" aria-hidden="true"></div>
+        <video id="remoteVideo" class="remote" autoplay playsinline></video>
+        <div id="remotePlaceholder" class="remote-placeholder">
+          <div id="disconnectMark" class="disconnect-mark" hidden><span></span><span></span><span></span></div>
+          <div id="searchFigures" class="search-figures" aria-hidden="true">
+            <div class="search-logo">
+              <span class="search-logo-mark"><i></i><i></i><i></i></span>
+              <span class="search-logo-word"><b>E</b><b>L</b><b>V</b><b>A</b><b>R</b></span>
+            </div>
+          </div>
+          <div class="remote-state">
+            <span class="remote-state-kicker">ELVAR / ROOM</span>
+            <h2 id="remoteTitle">Поиск</h2>
+            <p id="remoteSubtitle">Подбираем собеседника</p>
+          </div>
+        </div>
+
+        <div class="stage-top-left">
+          <div class="status-line"><span id="statusDot" class="status-dot"></span><span id="peerStatus">Поиск</span></div>
+          <div id="peerCard" class="peer-card" hidden>
+            <span id="peerAvatar" class="avatar avatar-medium">◉</span>
+            <span class="peer-card-copy">
+              <span class="peer-name-line"><strong id="peerName">Собеседник</strong><span id="peerOwnerBadge" class="owner-badge" hidden>OWNER</span></span>
+              <span id="peerCountry">Страна —</span>
+            </span>
+            <span id="peerAway" class="away-badge" hidden>Отошёл</span>
+          </div>
+        </div>
+
+        <div class="stage-actions">
+          <button id="chatToggle" class="floating-action" type="button" aria-label="Открыть чат" hidden><span>Чат</span><b>⌁</b></button>
+          <button id="fullscreenBtn" class="floating-action compact" type="button" aria-label="Полный экран">↗</button>
+        </div>
+
+        <div id="pip" class="pip" draggable="false">
+          <video id="localVideo" autoplay muted playsinline></video>
+          <div id="pipAvatarFallback" class="pip-fallback">+</div>
+          <div class="pip-label"><span>Ты</span><b id="pipLabel">Ты</b></div>
+        </div>
+
+        <div id="connectionStats" class="connection-stats" hidden>
+          <span>RTT <b id="rttValue">—</b></span>
+          <span>голос <b id="voiceDelayValue">—</b></span>
+        </div>
+
+        <aside id="chatPanel" class="chat-panel" aria-label="Чат" hidden>
+          <div class="panel-head">
+            <div><span class="panel-kicker">PRIVATE CHAT</span><strong>Сообщения</strong><span id="chatPeerLabel">Собеседник</span></div>
+            <button id="chatClose" class="close-button" type="button" aria-label="Закрыть чат">×</button>
+          </div>
+          <div id="chatMessages" class="chat-messages"><div class="chat-empty">Когда вы соединитесь, сообщения будут появляться здесь.</div></div>
+          <div class="chat-footer">
+            <span id="chatConnection" class="chat-connection">Сообщения проходят через соединение ELVAR</span>
+            <form id="chatForm" class="chat-form">
+              <input id="chatInput" maxlength="1000" autocomplete="off" placeholder="Напиши сообщение…">
+              <button type="submit" aria-label="Отправить">↗</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+
+      <div class="reaction-dock" id="reactionDock" hidden>
+        <button data-sound="duck" type="button" aria-label="Утка">🦆</button>
+        <button data-sound="pop" type="button" aria-label="Pop">◌</button>
+        <button data-sound="bell" type="button" aria-label="Колокольчик">◍</button>
+        <button data-sound="laser" type="button" aria-label="Лазер">✦</button>
+        <button data-sound="boing" type="button" aria-label="Boing">⌁</button>
+      </div>
+
+      <div class="room-controls">
+        <div class="control-group">
+          <button id="micBtn" class="control-icon" type="button" aria-label="Микрофон" aria-pressed="false">◉<span>Микрофон</span></button>
+          <button id="cameraBtn" class="control-icon" type="button" aria-label="Камера" aria-pressed="false">▣<span>Камера</span></button>
+          <button id="reactionBtn" class="control-icon" type="button" aria-label="Реакции">✦<span>Реакции</span></button>
+          <button id="awayBtn" class="control-icon" type="button" aria-label="Статус отошёл">◒<span>Отошёл</span></button>
+          <button id="chatBtnBottom" class="control-icon" type="button" aria-label="Чат">⌁<span>Чат</span></button>
+        </div>
+        <div class="control-center">
+          <button id="nextBtn" class="next-button" type="button"><span>Следующий</span><b>→</b></button>
+        </div>
+        <div class="control-group control-group-right">
+          <button id="reportBtn" class="control-icon quiet" type="button" aria-label="Пожаловаться" disabled>⚑<span>Жалоба</span></button>
+          <button id="endBtn" class="end-button" type="button" aria-label="Завершить">×<span>Завершить</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="permissionModal" class="overlay" hidden>
+    <div class="modal-card small-card">
+      <div class="modal-kicker">01 / ДОСТУП</div>
+      <h2>Камера и микрофон</h2>
+      <p>Сначала браузер покажет своё системное окно. ELVAR не включает устройства без твоего действия.</p>
+      <div class="modal-actions"><button id="cancelPermission" class="secondary-button" type="button">Отмена</button><button id="allowPermission" class="primary-button" type="button">Разрешить</button></div>
+    </div>
+  </div>
+
+  <div id="profileModal" class="overlay" hidden>
+    <form id="profileForm" class="modal-card profile-card">
+      <div class="modal-topline"><div><div class="modal-kicker">ПРОФИЛЬ</div><h2>Как тебя показывать</h2></div><button id="closeProfile" class="close-button" type="button" aria-label="Закрыть">×</button></div>
+      <div class="profile-hero"><div id="profilePreview" class="profile-preview">+</div><div><strong>Локальный профиль</strong><p>Имя и страна используются для поиска. Email необязателен и нужен только для связи с владельцем проекта.</p></div></div>
+      <div class="form-grid">
+        <label>Имя<input id="profileName" name="name" maxlength="32" required placeholder="Например, Alex"></label>
+        <label>Email<input id="profileEmail" name="email" type="email" maxlength="160" placeholder="you@example.com"></label>
+        <label>Твоя страна<select id="profileCountry" name="country"></select></label>
+        <label>Искать в стране<select id="targetCountry" name="targetCountry"></select></label>
+        <label class="wide">О себе<textarea id="profileBio" name="bio" maxlength="180" placeholder="Пара слов о себе"></textarea></label>
+        <label>Иконка<select id="avatarSelect" name="avatar"></select></label>
+        <label>Изображение<input id="avatarFile" type="file" accept="image/*"></label>
+      </div>
+      <div class="profile-hint">Фактическая страна сети показывается отдельно после соединения и не заменяет указанную тобой страну профиля.</div>
+      <div class="modal-actions"><button id="cancelProfile" class="secondary-button" type="button">Отмена</button><button class="primary-button" type="submit">Сохранить профиль</button></div>
+    </form>
+  </div>
+
+  <div id="settingsModal" class="overlay" hidden>
+    <div class="modal-card settings-card">
+      <div class="modal-head"><div><div class="modal-kicker">ROOM / CONTROL</div><h2>Настройки</h2></div><button id="closeSettings" class="close-button" type="button" aria-label="Закрыть">×</button></div>
+      <div class="settings-layout">
+        <div class="settings-tabs" role="tablist">
+          <button class="settings-tab active" data-tab="audio" type="button">Аудио</button>
+          <button class="settings-tab" data-tab="video" type="button">Видео</button>
+          <button class="settings-tab" data-tab="profile" type="button">Профиль</button>
+          <button class="settings-tab" data-tab="network" type="button">Сеть</button>
+          <button class="settings-tab" data-tab="games" type="button">Игры</button>
+          <button id="adminTabButton" class="settings-tab" data-tab="admin" type="button" hidden>Admin</button>
+        </div>
+        <div class="settings-body">
+          <section class="settings-section active" data-panel="audio">
+            <div class="section-title"><span>Аудио</span><small>Твой голос и реакции</small></div>
+            <label class="setting-row"><span>Микрофон<select id="micSelect"></select></span></label>
+            <label class="setting-row"><span>Громкость <b id="volumeValue">100%</b><input id="volumeRange" type="range" min="0" max="140" value="100"></span></label>
+            <label class="setting-row"><span>Тембр<select id="voiceEffect"><option value="off">Обычный</option><option value="high">Высокий</option><option value="deep">Низкий</option><option value="robot">Робот</option><option value="radio">Рация</option></select></span></label>
+            <label class="switch-row"><span><b>Звуки реакций</b><small>Передавать реакцию собеседнику</small></span><input id="reactionSoundsToggle" type="checkbox" checked></label>
+            <p class="setting-note">Эффекты работают локально и могут немного увеличить задержку.</p>
+          </section>
+          <section class="settings-section" data-panel="video">
+            <div class="section-title"><span>Видео</span><small>Камера и локальный вид</small></div>
+            <label class="setting-row"><span>Камера<select id="cameraSelect"></select></span></label>
+            <label class="setting-row"><span>Изображение<select id="cameraFilter"><option value="normal">Обычный</option><option value="soft">Мягкий</option><option value="mono">Чёрно-белый</option><option value="contrast">Контраст</option><option value="warm">Тёплый</option></select></span></label>
+            <label class="switch-row"><span><b>Зеркальное отображение</b><small>Только для твоего превью</small></span><input id="mirrorToggle" type="checkbox" checked></label>
+          </section>
+          <section class="settings-section" data-panel="profile">
+            <div class="section-title"><span>Профиль</span><small>Локальные данные</small></div>
+            <div class="setting-profile" id="settingsProfileBox"></div>
+            <button id="editProfileSettings" class="secondary-button full-button" type="button">Изменить профиль</button>
+          </section>
+          <section class="settings-section" data-panel="network">
+            <div class="section-title"><span>Сеть</span><small>Живые показатели соединения</small></div>
+            <div class="metric-grid">
+              <div class="metric"><span>Твоя сеть</span><strong id="localLatencyMetric">—</strong><small>WebSocket RTT</small></div>
+              <div class="metric"><span>Собеседник</span><strong id="peerLatencyMetric">—</strong><small>WebRTC RTT</small></div>
+              <div class="metric"><span>Голос</span><strong id="voiceMetric">—</strong><small>оценка доставки</small></div>
+              <div class="metric"><span>Страна сети</span><strong id="localGeoMetric">—</strong><small>Edge-сигнал</small></div>
+            </div>
+            <div class="network-note" id="networkNote">Подключись к собеседнику, чтобы увидеть реальные значения.</div>
+          </section>
+          <section class="settings-section" data-panel="games">
+            <div class="section-title"><span>Игры</span><small>Небольшие игры внутри комнаты</small></div>
+            <div class="game-launch-grid"><button data-game="snake" class="game-card" type="button"><span>╲╱</span><strong>Snake</strong><small>Короткая партия</small></button><button data-game="reaction" class="game-card" type="button"><span>●</span><strong>Reaction</strong><small>Проверь скорость</small></button></div>
+          </section>
+          <section class="settings-section" data-panel="admin">
+            <div class="section-title"><span>Admin</span><small>Только для владельца</small></div>
+            <div class="admin-gate" id="adminGate">Admin режим защищён ключом Cloudflare.</div>
+            <div class="admin-toolbar"><button id="adminRefresh" class="secondary-button" type="button">Обновить</button><button id="adminTokenButton" class="secondary-button" type="button">Ключ</button></div>
+            <div id="adminUsers" class="admin-list"></div>
+            <div class="admin-subhead">Жалобы</div><div id="adminReports" class="admin-list"></div>
+            <div class="admin-subhead">Обратная связь</div><div id="adminFeedback" class="admin-list"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="reportModal" class="overlay" hidden>
+    <form id="reportForm" class="modal-card small-card">
+      <div class="modal-topline"><div><div class="modal-kicker">МОДЕРАЦИЯ</div><h2>Пожаловаться</h2></div><button id="cancelReport" class="close-button" type="button" aria-label="Закрыть">×</button></div>
+      <p>Профиль собеседника сохранится в журнале, после чего ты вернёшься в поиск.</p>
+      <textarea id="reportReason" maxlength="240" required placeholder="Что произошло?"></textarea>
+      <div class="modal-actions"><button id="cancelReportAction" class="secondary-button" type="button">Отмена</button><button class="danger-button" type="submit">Отправить жалобу</button></div>
+    </form>
+  </div>
+
+  <div id="feedbackModal" class="overlay" hidden>
+    <form id="feedbackForm" class="modal-card small-card">
+      <div class="modal-topline"><div><div class="modal-kicker">ОБРАТНАЯ СВЯЗЬ</div><h2>Напиши мне</h2></div><button id="cancelFeedback" class="close-button" type="button" aria-label="Закрыть">×</button></div>
+      <p>Сообщи об ошибке, предложи функцию или оставь отзыв.</p>
+      <div class="stack-fields"><input id="feedbackName" maxlength="80" placeholder="Имя"><input id="feedbackEmail" type="email" maxlength="160" placeholder="Email для ответа"><textarea id="feedbackMessage" maxlength="2000" required placeholder="Сообщение"></textarea></div>
+      <div class="modal-actions"><button id="cancelFeedbackAction" class="secondary-button" type="button">Отмена</button><button class="primary-button" type="submit">Отправить</button></div>
+    </form>
+  </div>
+
+  <div id="gameModal" class="overlay" hidden>
+    <div class="modal-card game-modal-card">
+      <div class="modal-head"><div><div class="modal-kicker">МИНИ-ИГРА</div><h2 id="gameTitle">Snake</h2></div><button id="closeGame" class="close-button" type="button" aria-label="Закрыть">×</button></div>
+      <div id="snakeGame" class="game-panel" hidden><canvas id="snakeCanvas" width="360" height="360"></canvas><div class="game-line"><span id="snakeScore">0</span><button id="snakeStart" class="primary-button" type="button">Старт</button></div></div>
+      <div id="reactionGame" class="game-panel" hidden><button id="reactionTarget" class="reaction-target" type="button">Жди…</button><div class="game-line"><span id="reactionScore">Готов</span><button id="reactionStart" class="primary-button" type="button">Старт</button></div></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
