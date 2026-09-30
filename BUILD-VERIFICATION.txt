@@ -1,0 +1,18 @@
+ELVAR v1 / 0.12 — rebuild verification
+
+Passed:
+- Worker syntax + matching + security syntax
+- Client syntax
+- HTML/JS ID consistency (174 IDs)
+- Project invariants
+- Static UI smoke
+- Favicon asset validation
+- Feature hooks (accounts / groups / favorites / reports / admin)
+- PBKDF2 password hashing + random token generation
+- Client runtime startup smoke
+- Matchmaking stress test: 2k / 20k / 50k / 100k synthetic users
+
+Notes:
+- Wrangler dry-run could not be completed in the container because npx timed out while trying to obtain Wrangler dependencies.
+- The project itself does not require node_modules to run the static/source checks above.
+- Real email delivery requires Cloudflare Email Service to be configured for the EMAIL binding and a valid SUPPORT_FROM sender.
